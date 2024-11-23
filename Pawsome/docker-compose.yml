@@ -36,7 +36,7 @@ services:
       - mongo
 
   mongo:
-    image: mongo:5.0
+    image: mongo:latest
     container_name: mongo
     ports:
       - "27017:27017"
@@ -46,6 +46,8 @@ services:
       - mongo_data:/data/db
     profiles:
       - dev
+    networks:
+      - app-network
 
 volumes:
   pg_data:
