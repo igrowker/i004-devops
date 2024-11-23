@@ -20,11 +20,13 @@ NOTA: Si tienes instalado Docker Desktop no necesitas descargar docker compose.
 
 La estructura de este repositorio es la siguiente:
 
+´´´bash
 devops/
 ├── Pawsome/
 │ ├── docker-compose.yml
 │ ├── .env
 │ └── README.md
+´´´
 
 - `docker-compose.yml`: Archivo principal para levantar los servicios Docker.
 - `.env`: Archivo con las variables de entorno necesarias.
@@ -128,6 +130,14 @@ docker-compose up --build
 
 3. Error de conexión con MongoDB:
    Verifica que las variables de entorno en .env estén configuradas correctamente. También asegúrate de que el contenedor de MongoDB esté corriendo.
+
+## **Población de la base de datos (seeding)**
+
+Después de configurar el proyecto, es posible que desees poblar la base de datos con datos iniciales para desarrollo o pruebas. Corre el script:
+
+´´´bash
+npm run seed
+´´´
 
 ## **Notas finales**
 
