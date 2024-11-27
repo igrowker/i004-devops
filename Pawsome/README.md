@@ -20,13 +20,13 @@ NOTA: Si tienes instalado Docker Desktop no necesitas descargar docker compose.
 
 La estructura de este repositorio es la siguiente:
 
-´´´bash
+```bash
 devops/
 ├── Pawsome/
 │ ├── docker-compose.yml
 │ ├── .env
 │ └── README.md
-´´´
+```
 
 - `docker-compose.yml`: Archivo principal para levantar los servicios Docker.
 - `.env`: Archivo con las variables de entorno necesarias.
@@ -88,6 +88,7 @@ Esto hará lo siguiente:
 
 - Backend: Disponible en http://localhost:3000.
 - Frontend: Disponible en http://localhost:5173.
+- Frontend Production: Disponible en puerto 80.
 - Base de Datos MongoDB: Disponible en el puerto 27017.
 
 ## **Comandos útiles**

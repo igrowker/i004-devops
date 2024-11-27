@@ -3,11 +3,11 @@ services:
     build:
       context: ../../i004-pawsome-front
       dockerfile: Dockerfile
+      target: dev
     networks:
       - app-network
     ports:
       - "5173:5173"
-      - "80:80"
     volumes:
       - ../../i004-pawsome-front:/app
       - /app/node_modules
@@ -15,11 +15,13 @@ services:
       NODE_ENV: ${NODE_ENV:-development}
     profiles:
       - dev
+      - prod
 
   backend:
     build:
       context: ../../i004-pawsome-back
       dockerfile: Dockerfile
+      target: dev
     networks:
       - app-network
     ports:
@@ -32,25 +34,28 @@ services:
       MONGO_URI: ${URI}
     profiles:
       - dev
+      - prod
     depends_on:
       - mongo
 
   mongo:
-    image: mongo:latest
+    image: mongo:5.0
     container_name: mongo
     ports:
       - "27017:27017"
     environment:
       MONGO_INITDB_DATABASE: ${MONGO_DB}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
     volumes:
       - mongo_data:/data/db
     profiles:
       - dev
+      - prod
     networks:
       - app-network
 
 volumes:
-  pg_data:
   mongo_data:
 
 networks:
