@@ -21,13 +21,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
+      
 
   # Servicio backend (Node.js)
   backend:
-    build:
-      context: ./cloned-repos/i004-crewland-back
-      dockerfile: Dockerfile.dev
+    image: igrowker/i004-crewland-back-dev-image
     container_name: crewland-backend
     environment:
       # backend api port
@@ -64,9 +62,7 @@ services:
 
   # Servicio frontend (React)
   frontend:
-    build:
-      context: ./cloned-repos/i004-crewland-front
-      dockerfile: Dockerfile.dev
+    image: igrowker/i004-crewland-front-dev-image
     container_name: crewland-frontend
     ports:
       - "80:3000" 
