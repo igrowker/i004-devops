@@ -31,4 +31,6 @@ SENDGRID_REPLY_TO=crewlandevents@gmail.com
 
 3. ejecutar el siguiente comando para desplegar
 docker-compose up --build
-
+## para qa 
+docker-compose -f docker-compose-qa.yml pull 
+docker-compose -f docker-compose-qa.yml up -d

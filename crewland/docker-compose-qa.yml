@@ -22,7 +22,6 @@ services:
       timeout: 5s
       retries: 5
 
-
   # Servicio backend (Node.js)
   backend:
     image: igrowker/i004-crewland-back-dev-image
