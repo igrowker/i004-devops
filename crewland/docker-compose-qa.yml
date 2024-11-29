@@ -55,7 +55,6 @@ services:
       postgres:
         condition: service_healthy
     volumes:
-      - ./cloned-repos/i004-crewland-back:/app
       - /app/node_modules
     networks:
       - crewland-network
@@ -71,7 +70,6 @@ services:
     networks:
       - crewland-network
     volumes:
-      - ./cloned-repos/i004-crewland-front:/app
       - /app/node_modules
 
 networks:
