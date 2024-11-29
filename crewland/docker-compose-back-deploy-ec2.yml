@@ -1,27 +1,28 @@
 version: '3.8'
 
 services:
-  # Servicio Posgress
-  postgres:
+  # Servicio de verificación de la base de datos Postgres Neon
+  db-check:
     image: postgres:latest
-    container_name: crewland-db
+    container_name: db-check
+    restart: "no"
+    entrypoint: >
+      sh -c "
+      echo 'Checking database connectivity and executing a query...';
+      until pg_isready -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USERNAME}; do
+        echo 'Waiting for database to be ready...';
+        sleep 2;
+      done;
+      echo 'Database is ready. Testing query execution...';
+      PGPASSWORD=${DB_PASSWORD} psql -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USERNAME} -d ${DB_NAME} -c 'SELECT 1';
+      echo 'Query executed successfully. Database is operational.';
+      "
+
     environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "${DB_PORT}:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./database_scripts/custom-entrypoint.sh:/docker-entrypoint-initdb.d/custom-entrypoint.sh
+      PGPASSWORD: ${DB_PASSWORD} # Para que pg_isready pueda autenticar
     networks:
       - crewland-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      
+    depends_on: []
 
   # Servicio backend (Node.js)
   backend:
@@ -36,6 +37,8 @@ services:
       DB_NAME: ${DB_NAME}
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
+      DB_SSL_REJECT_UNAUTHORIZED: ${DB_SSL_REJECT_UNAUTHORIZED}
+      DB_SSL: ${DB_SSL}
       DATABASE_URL: ${DATABASE_URL}
       # JWT
       JWT_SECRET: ${JWT_SECRET}
@@ -52,8 +55,8 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      postgres:
-        condition: service_healthy
+      db-check:
+        condition: service_completed_successfully
     volumes:
       - ./cloned-repos/i004-crewland-back:/app
       - /app/node_modules
