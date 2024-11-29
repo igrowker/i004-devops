@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  # Servicio Posgress
+  postgres:
+    image: postgres:latest
+    container_name: crewland-db
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database_scripts/custom-entrypoint.sh:/docker-entrypoint-initdb.d/custom-entrypoint.sh
+    networks:
+      - crewland-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  # Servicio backend (Node.js)
+  backend:
+    image: igrowker/i004-crewland-back-dev-image
+    container_name: crewland-backend
+    environment:
+      # backend api port
+      PORT: ${PORT}
+      # Database
+      DB_HOST: ${DB_HOST}
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DATABASE_URL: ${DATABASE_URL}
+      # JWT
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_TOKEN_EXPIRED: ${JWT_TOKEN_EXPIRED}
+      # twilo
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+      TWILIO_WHATSAPP_NUMBER: ${TWILIO_WHATSAPP_NUMBER}
+      # sendgrip
+      SENDGRID_AUTH_TOKEN: ${SENDGRID_AUTH_TOKEN}
+      SENDGRID_API_KEY: ${SENDGRID_API_KEY}
+      SENDGRID_FROM_EMAIL: ${SENDGRID_FROM_EMAIL}
+      SENDGRID_REPLY_TO: ${SENDGRID_REPLY_TO}
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./cloned-repos/i004-crewland-back:/app
+      - /app/node_modules
+    networks:
+      - crewland-network
+
+  # Servicio frontend (React)
+  frontend:
+    image: igrowker/i004-crewland-front-dev-image
+    container_name: crewland-frontend
+    ports:
+      - "80:3000" 
+    depends_on:
+      - backend 
+    networks:
+      - crewland-network
+    volumes:
+      - ./cloned-repos/i004-crewland-front:/app
+      - /app/node_modules
+
+networks:
+  crewland-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+    
