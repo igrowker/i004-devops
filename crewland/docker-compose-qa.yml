@@ -21,13 +21,15 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    restart: unless-stopped
+
 
   # Servicio backend (Node.js)
   backend:
     image: igrowker/i004-crewland-back-dev-image
     container_name: crewland-backend
     environment:
-      # backend api port
+      # Backend API port
       PORT: ${PORT}
       # Database
       DB_HOST: ${DB_HOST}
