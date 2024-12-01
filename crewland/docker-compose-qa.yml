@@ -25,12 +25,10 @@ services:
 
   # Servicio backend (Node.js)
   backend:
-    build:
-      context: ./cloned-repos/i004-crewland-back
-      dockerfile: Dockerfile.dev
+    image: igrowker/i004-crewland-back-dev-image
     container_name: crewland-backend
     environment:
-      # backend api port
+      # Backend API port
       PORT: ${PORT}
       # Database
       DB_HOST: ${DB_HOST}
@@ -57,16 +55,13 @@ services:
       postgres:
         condition: service_healthy
     volumes:
-      - ./cloned-repos/i004-crewland-back:/app
       - /app/node_modules
     networks:
       - crewland-network
 
   # Servicio frontend (React)
   frontend:
-    build:
-      context: ./cloned-repos/i004-crewland-front
-      dockerfile: Dockerfile.dev
+    image: igrowker/i004-crewland-front-dev-image
     container_name: crewland-frontend
     ports:
       - "80:3000" 
@@ -75,7 +70,6 @@ services:
     networks:
       - crewland-network
     volumes:
-      - ./cloned-repos/i004-crewland-front:/app
       - /app/node_modules
 
 networks:

@@ -16,7 +16,7 @@ DB_HOST=postgres
 DB_USERNAME=postgres
 DB_PASSWORD=PASSWORD
 DB_NAME=crewlanddb
-DB_MIGRATE_DATA = true
+DB_MIGRATE_DATA=true
 DATABASE_URL=postgresql://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?schema=SCHEMA
 # twilo
 TWILIO_ACCOUNT_SID=.............
@@ -30,5 +30,9 @@ SENDGRID_REPLY_TO=crewlandevents@gmail.com
 ######################################################################
 
 3. ejecutar el siguiente comando para desplegar
+NOTE: QA no debe ejecutar ese comando. En su lugar, debe ejecutar el paso 4.
 docker-compose up --build
+
+4. Solo para QA
+docker-compose -f docker-compose-qa.yml up --build --pull
 

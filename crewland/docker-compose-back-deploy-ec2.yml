@@ -58,7 +58,6 @@ services:
       db-check:
         condition: service_completed_successfully
     volumes:
-      - ./cloned-repos/i004-crewland-back:/app
       - /app/node_modules
     networks:
       - crewland-network
@@ -70,4 +69,3 @@ networks:
 volumes:
   postgres_data:
     driver: local
-    
