@@ -36,3 +36,4 @@ docker-compose up --build
 4. Solo para QA
 docker-compose -f docker-compose-qa.yml up --build --pull
 
+
