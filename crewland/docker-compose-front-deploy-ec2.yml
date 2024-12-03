@@ -7,8 +7,6 @@ services:
     container_name: crewland-frontend
     ports:
       - "80:3000" 
-    depends_on:
-      - backend 
     volumes:
       - /app/node_modules
     environment:
