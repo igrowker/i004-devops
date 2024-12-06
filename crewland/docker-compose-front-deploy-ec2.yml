@@ -11,6 +11,8 @@ services:
       - /app/node_modules
     environment:
       - BACKEND_REFERENCE=${BACKEND_REFERENCE} # Pasar la referencia del backend como variable de entorno
+      - NEXT_PUBLIC_SERVER=${NEXT_PUBLIC_SERVER}
+      - NEXT_PUBLIC_DEFAULT_IMG_USER_CLOUDINARY=${NEXT_PUBLIC_DEFAULT_IMG_USER_CLOUDINARY}
     command: >
       sh -c "
       sed -i \"s|http://localhost:3000|${BACKEND_REFERENCE}|g\" /app/src/server.config.ts &&
